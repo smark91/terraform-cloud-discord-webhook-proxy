@@ -2,7 +2,7 @@
 
 100% made using ChatGPT conversation (included this `README.md`) :heart:
 
-This is a sample Golang application that listens for Terraform Cloud webhooks and sends formatted messages to a Discord webhook based on the webhook payload.
+This is a Golang application that listens for Terraform Cloud webhooks and sends formatted messages to a Discord webhook based on the webhook payload.
 
 ## Prerequisites
 

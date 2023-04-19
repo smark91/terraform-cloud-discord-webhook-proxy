@@ -33,5 +33,4 @@ jobs:
           push: true
           tags: |
             smark91/terraform-cloud-discord-webhook-proxy:latest
-            smark91/terraform-cloud-discord-webhook-proxy:${{ github.ref_name }}"
-          
+            smark91/terraform-cloud-discord-webhook-proxy:${{ github.ref_name }}

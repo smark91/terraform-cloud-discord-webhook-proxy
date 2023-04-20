@@ -1,0 +1,15 @@
+dockers:
+  - use: buildx
+    goarch: amd64
+    image_templates:
+    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Tag }}"
+    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Major }}"
+    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Major }}.{{ .Minor }}"
+    - "smark91/terraform-cloud-discord-webhook-proxy:latest"
+  - use: buildx
+    goarch: arm64
+    image_templates:
+    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Tag }}"
+    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Major }}"
+    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Major }}.{{ .Minor }}"
+    - "smark91/terraform-cloud-discord-webhook-proxy:latest"

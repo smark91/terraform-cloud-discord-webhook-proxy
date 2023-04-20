@@ -37,7 +37,7 @@ This is a Golang application that listens for Terraform Cloud webhooks and sends
     or
 
     ```bash
-    docker run -p $TF_DISCORD_PROXY_PORT:8080 -e TF_DISCORD_PROXY_WEBHOOK_URL=$TF_DISCORD_PROXY_WEBHOOK_URL smark91/terraform-cloud-discord-webhook:1.0.0
+    docker run -p $TF_DISCORD_PROXY_PORT:8080 -e TF_DISCORD_PROXY_WEBHOOK_URL=$TF_DISCORD_PROXY_WEBHOOK_URL smark91/terraform-cloud-discord-webhook:<image-version>
     ```
 
 5. In your Terraform Cloud workspace, create a notification configuration with the following settings:
@@ -59,7 +59,7 @@ If you prefer to use Docker Compose to run the Terraform Cloud Discord webhook p
    version: '3'
    services:
      terraform-cloud-discord-webhook-proxy:
-       image: smark91/terraform-cloud-discord-webhook-proxy:1.0.0
+       image: smark91/terraform-cloud-discord-webhook-proxy:<image-version>
        ports:
          - "8080:8080"
        environment:

@@ -2,12 +2,12 @@ dockers:
   - use: buildx
     goarch: amd64
     image_templates:
-    - "smark91/{{ .ProjectName }}:{{ .Version }}-amd64"
-    - "smark91/{{ .ProjectName }}:latest-amd64"
+    - "smark91/{{ .ProjectName }}:{{ .Version }}"
+    - "smark91/{{ .ProjectName }}:latest"
   - use: buildx
     goarch: arm64
     image_templates:
-    - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64"
-    - "smark91/{{ .ProjectName }}:latest-arm64"
+    - "smark91/{{ .ProjectName }}:{{ .Version }}"
+    - "smark91/{{ .ProjectName }}:latest"
     build_flag_templates:
       - "--platform=linux/arm64/v8"

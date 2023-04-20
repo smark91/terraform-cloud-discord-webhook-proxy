@@ -4,6 +4,9 @@ FROM golang:1.20.3-alpine AS build
 # Set the working directory inside the container
 WORKDIR /app
 
+# Define the build argument for the version
+ARG VERSION
+
 # Copy the Go module files and download the dependencies
 COPY go.mod ./
 RUN go mod download
@@ -14,8 +17,8 @@ COPY . .
 # Run unit tests
 RUN go test -v ./...
 
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+# Build the application with the version label
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags "-X main.version=$VERSION" -o app .
 
 # Use a small Alpine Linux image as the base image for the final image
 FROM alpine:3.17

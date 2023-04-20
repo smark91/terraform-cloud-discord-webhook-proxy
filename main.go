@@ -9,6 +9,9 @@ import (
 	"os"
 )
 
+// version is set at build time using -ldflags "-X main.version=$VERSION"
+var version string
+
 func main() {
 	// Read the Discord webhook URL from an environment variable
 	webhookURL := os.Getenv("TF_DISCORD_PROXY_WEBHOOK_URL")
@@ -56,6 +59,7 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+	log.Printf("terraform-cloud-discord-webhook-proxy version %s\n", version)
 	log.Printf("Listening on port %s...", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

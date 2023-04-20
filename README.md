@@ -59,11 +59,12 @@ If you prefer to use Docker Compose to run the Terraform Cloud Discord webhook p
    version: '3'
    services:
      terraform-cloud-discord-webhook-proxy:
-       image: smark91/terraform-cloud-discord-webhook:1.0.0
+       image: smark91/terraform-cloud-discord-webhook-proxy:1.0.0
        ports:
          - "8080:8080"
        environment:
-         - DISCORD_WEBHOOK_URL=<your-discord-webhook-url>
+         - TF_DISCORD_PROXY_WEBHOOK_URL=<your-discord-webhook-url>
+         # - TF_DISCORD_PROXY_PORT=8080
    ```
 
    Replace `<your-discord-webhook-url>` with the Discord webhook URL.

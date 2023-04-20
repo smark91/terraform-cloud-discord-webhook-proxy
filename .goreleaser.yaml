@@ -4,7 +4,7 @@ dockers:
     image_templates:
     - "smark91/{{ .ProjectName }}:{{ .Version }}-amd64"
     - "smark91/{{ .ProjectName }}:latest-amd64"
-    skip_push: false
+    skip_push: true
   - use: buildx
     goarch: arm64
     image_templates:
@@ -12,7 +12,7 @@ dockers:
     - "smark91/{{ .ProjectName }}:latest-arm64v8"
     build_flag_templates:
       - "--platform=linux/arm64/v8"
-    skip_push: false
+    skip_push: true
 
 docker_manifests:
 - name_template: "smark91/{{ .ProjectName }}:{{ .Version }}"

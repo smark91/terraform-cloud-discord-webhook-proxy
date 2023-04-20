@@ -89,24 +89,27 @@ func createDiscordMessage(payload Payload) (string,error) {
         return "", errors.New("payload does not contain any notifications")
     }
 
-    if payload.Notifications[0].RunStatus == "" {
-        return "", errors.New("payload does not contain a run status")
-    }
+    // Skip the check if trigger is "verification"
+    if payload.Notifications[0].Trigger != "verification" {
+        if payload.Notifications[0].RunStatus == "" {
+            return "", errors.New("payload does not contain a run status")
+        }
 
-    if payload.WorkspaceName == "" {
-        return "", errors.New("payload does not contain a workspace name")
-    }
+        if payload.WorkspaceName == "" {
+            return "", errors.New("payload does not contain a workspace name")
+        }
 
-    if payload.RunID == "" {
-        return "", errors.New("payload does not contain a run ID")
-    }
+        if payload.RunID == "" {
+            return "", errors.New("payload does not contain a run ID")
+        }
 
-    if payload.RunURL == "" {
-        return "", errors.New("payload does not contain a run URL")
-    }
+        if payload.RunURL == "" {
+            return "", errors.New("payload does not contain a run URL")
+        }
 
-    if payload.Notifications[0].Message == "" {
-        return "", errors.New("payload does not contain a notification message")
+        if payload.Notifications[0].Message == "" {
+            return "", errors.New("payload does not contain a notification message")
+        }
     }
 
     var color int
@@ -181,7 +184,7 @@ func createDiscordMessage(payload Payload) (string,error) {
 
     payloadBytes, err := json.Marshal(message)
     if err != nil {
-        return "", errors.New("paylError creating Discord message")
+        return "", errors.New("Error creating Discord message")
     }
 
     return string(payloadBytes), nil

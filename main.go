@@ -41,7 +41,7 @@ func main() {
 		}
 
 		// Send the Discord webhook message
-		err = sendDiscordWebhook(webhookURL, message)
+		err = sendDiscordWebhook(webhookURL, message, payload)
 		if err != nil {
 			log.Println("Error sending Discord webhook:", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -214,7 +214,7 @@ type Field struct {
 }
 
 // Define the function to send the Discord webhook message
-func sendDiscordWebhook(webhookURL string, message string) error {
+func sendDiscordWebhook(webhookURL string, message string, payload Payload) error {
 	reqBody := []byte(message)
 
 	req, err := http.NewRequest("POST", webhookURL, bytes.NewBuffer(reqBody))
@@ -234,7 +234,17 @@ func sendDiscordWebhook(webhookURL string, message string) error {
 
 	defer resp.Body.Close()
 
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
+	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
+        var runStatus string
+        
+        if payload.Notifications[0].Trigger == "verification" {
+            runStatus = "verification"
+        } else {
+            runStatus = payload.Notifications[0].RunStatus
+        }
+        log.Println("Discord webhook sent successfully with status:", runStatus)
+		return nil
+	} else {
 		log.Println("Error sending Discord webhook: unexpected status code", resp.StatusCode)
 		return errors.New("unexpected status code")
 	}

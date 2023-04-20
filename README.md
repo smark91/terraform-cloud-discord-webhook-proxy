@@ -34,7 +34,7 @@ This is a Golang application that listens for Terraform Cloud webhooks and sends
     go run main.go
     ```
 
-    or 
+    or
 
     ```bash
     docker run -p $TF_DISCORD_PROXY_PORT:8080 -e TF_DISCORD_PROXY_WEBHOOK_URL=$TF_DISCORD_PROXY_WEBHOOK_URL smark91/terraform-cloud-discord-webhook:1.0.0

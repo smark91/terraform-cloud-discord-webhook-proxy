@@ -85,128 +85,128 @@ type Notification struct {
 }
 
 func createDiscordMessage(payload Payload) (string, error) {
-    if len(payload.Notifications) == 0 {
-        return "", errors.New("payload does not contain any notifications")
-    }
+	if len(payload.Notifications) == 0 {
+		return "", errors.New("payload does not contain any notifications")
+	}
 
-    // Skip the check if trigger is "verification"
-    if payload.Notifications[0].Trigger != "verification" {
-        if err := validatePayload(payload); err != nil {
-            return "", err
-        }
-    }
+	// Skip the check if trigger is "verification"
+	if payload.Notifications[0].Trigger != "verification" {
+		if err := validatePayload(payload); err != nil {
+			return "", err
+		}
+	}
 
-    color := getColorForRunStatus(payload.Notifications[0].RunStatus)
+	color := getColorForRunStatus(payload.Notifications[0].RunStatus)
 
-    embed := createDiscordEmbed(payload, color)
+	embed := createDiscordEmbed(payload, color)
 
-    message := Message{
-        Embeds: []Embed{embed},
-    }
+	message := Message{
+		Embeds: []Embed{embed},
+	}
 
-    payloadBytes, err := json.Marshal(message)
-    if err != nil {
-        return "", errors.New("Error creating Discord message")
-    }
+	payloadBytes, err := json.Marshal(message)
+	if err != nil {
+		return "", errors.New("Error creating Discord message")
+	}
 
-    return string(payloadBytes), nil
+	return string(payloadBytes), nil
 }
 
 func validatePayload(payload Payload) error {
-    if payload.Notifications[0].RunStatus == "" {
-        return errors.New("payload does not contain a run status")
-    }
+	if payload.Notifications[0].RunStatus == "" {
+		return errors.New("payload does not contain a run status")
+	}
 
-    if payload.WorkspaceName == "" {
-        return errors.New("payload does not contain a workspace name")
-    }
+	if payload.WorkspaceName == "" {
+		return errors.New("payload does not contain a workspace name")
+	}
 
-    if payload.RunID == "" {
-        return errors.New("payload does not contain a run ID")
-    }
+	if payload.RunID == "" {
+		return errors.New("payload does not contain a run ID")
+	}
 
-    if payload.RunURL == "" {
-        return errors.New("payload does not contain a run URL")
-    }
+	if payload.RunURL == "" {
+		return errors.New("payload does not contain a run URL")
+	}
 
-    if payload.Notifications[0].Message == "" {
-        return errors.New("payload does not contain a notification message")
-    }
+	if payload.Notifications[0].Message == "" {
+		return errors.New("payload does not contain a notification message")
+	}
 
-    return nil
+	return nil
 }
 
 func getColorForRunStatus(runStatus string) int {
-    const (
-        ColorGrey   = 0x9e9e9e // Grey
-        ColorBlue   = 0x2196f3 // Blue
-        ColorYellow = 0xffc107 // Yellow
-        ColorGreen  = 0x4caf50 // Green
-        ColorRed    = 0xf44336 // Red
-        ColorViolet = 0xee82ee // Violet
-    )
+	const (
+		ColorGrey   = 0x9e9e9e // Grey
+		ColorBlue   = 0x2196f3 // Blue
+		ColorYellow = 0xffc107 // Yellow
+		ColorGreen  = 0x4caf50 // Green
+		ColorRed    = 0xf44336 // Red
+		ColorViolet = 0xee82ee // Violet
+	)
 
-    switch runStatus {
-    case "pending", "discarded", "canceled", "force_canceled":
-        return ColorGrey
-    case "fetching", "fetching_completed", "pre_plan_running", "pre_plan_completed", "queuing", "plan_queued", "planning", "cost_estimating", "cost_estimated", "policy_checking", "policy_checked", "post_plan_running", "post_plan_completed", "apply_queued", "applying":
-        return ColorBlue
-    case "policy_override", "planned":
-        return ColorYellow
-    case "policy_soft_failed", "errored":
-        return ColorRed
-    case "planned_and_finished", "applied", "confirmed":
-        return ColorGreen
-    default:
-        return ColorViolet
-    }
+	switch runStatus {
+	case "pending", "discarded", "canceled", "force_canceled":
+		return ColorGrey
+	case "fetching", "fetching_completed", "pre_plan_running", "pre_plan_completed", "queuing", "plan_queued", "planning", "cost_estimating", "cost_estimated", "policy_checking", "policy_checked", "post_plan_running", "post_plan_completed", "apply_queued", "applying":
+		return ColorBlue
+	case "policy_override", "planned":
+		return ColorYellow
+	case "policy_soft_failed", "errored":
+		return ColorRed
+	case "planned_and_finished", "applied", "confirmed":
+		return ColorGreen
+	default:
+		return ColorViolet
+	}
 }
 
 func createDiscordEmbed(payload Payload, color int) Embed {
-    var fields []Field
+	var fields []Field
 
-    if payload.Notifications[0].Trigger != "verification" {
-        fields = []Field{
-            {
-                Name:   "Workspace",
-                Value:  payload.WorkspaceName,
-                Inline: true,
-            },
-            {
-                Name:   "Run ID",
-                Value:  payload.RunID,
-                Inline: true,
-            },
-            {
-                Name:   "Run URL",
-                Value:  payload.RunURL,
-                Inline: false,
-            },
-            {
-                Name:   "Run Status",
-                Value:  payload.Notifications[0].RunStatus,
-                Inline: true,
-            },
-            {
-                Name:   "Run Updated At",
-                Value:  payload.Notifications[0].RunUpdatedAt,
-                Inline: true,
-            },
-            {
-                Name:   "Run Message",
-                Value:  payload.RunMessage,
-                Inline: false,
-            },
-        }
-    }
+	if payload.Notifications[0].Trigger != "verification" {
+		fields = []Field{
+			{
+				Name:   "Workspace",
+				Value:  payload.WorkspaceName,
+				Inline: true,
+			},
+			{
+				Name:   "Run ID",
+				Value:  payload.RunID,
+				Inline: true,
+			},
+			{
+				Name:   "Run URL",
+				Value:  payload.RunURL,
+				Inline: false,
+			},
+			{
+				Name:   "Run Status",
+				Value:  payload.Notifications[0].RunStatus,
+				Inline: true,
+			},
+			{
+				Name:   "Run Updated At",
+				Value:  payload.Notifications[0].RunUpdatedAt,
+				Inline: true,
+			},
+			{
+				Name:   "Run Message",
+				Value:  payload.RunMessage,
+				Inline: false,
+			},
+		}
+	}
 
-    embed := Embed{
-        Title:  payload.Notifications[0].Message,
-        Color:  color,
-        Fields: fields,
-    }
+	embed := Embed{
+		Title:  payload.Notifications[0].Message,
+		Color:  color,
+		Fields: fields,
+	}
 
-    return embed
+	return embed
 }
 
 type Message struct {
@@ -247,19 +247,17 @@ func sendDiscordWebhook(webhookURL string, message string, payload Payload) erro
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
-        var runStatus string
-        
-        if payload.Notifications[0].Trigger == "verification" {
-            runStatus = "verification"
-        } else {
-            runStatus = payload.Notifications[0].RunStatus
-        }
-        log.Println("Discord webhook sent successfully with status:", runStatus)
+		var runStatus string
+
+		if payload.Notifications[0].Trigger == "verification" {
+			runStatus = "verification"
+		} else {
+			runStatus = payload.Notifications[0].RunStatus
+		}
+		log.Println("Discord webhook sent successfully with status:", runStatus)
 		return nil
 	} else {
 		log.Println("Error sending Discord webhook: unexpected status code", resp.StatusCode)
 		return errors.New("unexpected status code")
 	}
-
-	return nil
 }

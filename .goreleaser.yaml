@@ -1,7 +1,23 @@
 dockers:
   - use: buildx
+    goarch: amd64
     image_templates:
-    - "smark91/{{ .ProjectName }}:{{ .Version }}"
-    - "smark91/{{ .ProjectName }}:latest"
+    - "smark91/{{ .ProjectName }}:{{ .Version }}-amd64"
+    - "smark91/{{ .ProjectName }}:latest-amd64"
+  - use: buildx
+    goarch: arm64
+    image_templates:
+    - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64v8"
+    - "smark91/{{ .ProjectName }}:latest-arm64v8"
     build_flag_templates:
-      - "--platform=linux/amd64,linux/arm64/v8"
+      - "--platform=linux/arm64/v8"
+
+docker_manifests:
+- name_template: "smark91/{{ .ProjectName }}:{{ .Version }}"
+  image_templates:
+  - "smark91/{{ .ProjectName }}:{{ .Version }}-amd64"
+  - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64v8"
+- name_template: "smark91/{{ .ProjectName }}:latest"
+  image_templates:
+  - "smark91/{{ .ProjectName }}:latest-amd64"
+  - "smark91/{{ .ProjectName }}:latest-arm64v8"

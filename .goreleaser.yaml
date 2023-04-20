@@ -2,14 +2,12 @@ dockers:
   - use: buildx
     goarch: amd64
     image_templates:
-    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Tag }}"
-    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Major }}"
-    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Major }}.{{ .Minor }}"
-    - "smark91/terraform-cloud-discord-webhook-proxy:latest"
+    - "smark91/{{ .ProjectName }}:{{ .Version }}-amd64"
+    - "smark91/{{ .ProjectName }}:latest-amd64"
   - use: buildx
     goarch: arm64
     image_templates:
-    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Tag }}"
-    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Major }}"
-    - "smark91/terraform-cloud-discord-webhook-proxy:{{ .Major }}.{{ .Minor }}"
-    - "smark91/terraform-cloud-discord-webhook-proxy:latest"
+    - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64"
+    - "smark91/{{ .ProjectName }}:latest-arm64"
+    build_flag_templates:
+      - "--platform=linux/arm64/v8"

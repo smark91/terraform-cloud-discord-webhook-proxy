@@ -8,29 +8,28 @@ dockers:
     - "smark91/{{ .ProjectName }}:latest-amd64"
   - use: buildx
     goarch: arm64
-    goarm: '8'
     image_templates:
-    - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64v8"
-    - "smark91/{{ .ProjectName }}:{{ .Major }}-arm64v8"
-    - "smark91/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}-arm64v8"
-    - "smark91/{{ .ProjectName }}:latest-arm64v8"
+    - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64"
+    - "smark91/{{ .ProjectName }}:{{ .Major }}-arm64"
+    - "smark91/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}-arm64"
+    - "smark91/{{ .ProjectName }}:latest-arm64"
     build_flag_templates:
-      - "--platform=linux/arm64/v8"
+      - "--platform=linux/arm64"
 
 docker_manifests:
 - name_template: "smark91/{{ .ProjectName }}:{{ .Version }}"
   image_templates:
   - "smark91/{{ .ProjectName }}:{{ .Version }}-amd64"
-  - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64v8"
+  - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64"
 - name_template: "smark91/{{ .ProjectName }}:{{ .Major }}"
   image_templates:
   - "smark91/{{ .ProjectName }}:{{ .Major }}-amd64"
-  - "smark91/{{ .ProjectName }}:{{ .Major }}-arm64v8"
+  - "smark91/{{ .ProjectName }}:{{ .Major }}-arm64"
 - name_template: "smark91/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}"
   image_templates:
   - "smark91/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}-amd64"
-  - "smark91/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}-arm64v8"
+  - "smark91/{{ .ProjectName }}:{{ .Major }}.{{ .Minor }}-arm64"
 - name_template: "smark91/{{ .ProjectName }}:latest"
   image_templates:
   - "smark91/{{ .ProjectName }}:latest-amd64"
-  - "smark91/{{ .ProjectName }}:latest-arm64v8"
+  - "smark91/{{ .ProjectName }}:latest-arm64"

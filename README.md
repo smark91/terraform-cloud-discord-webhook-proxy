@@ -4,6 +4,7 @@
 
 This is a Golang application that listens for Terraform Cloud webhooks and sends formatted messages to a Discord webhook based on the webhook payload.
 
+![Screenshot of Discord channel notification](/docs/example.png =250x250 )
 ## Prerequisites
 
 - [Terraform Cloud](https://app.terraform.io/) account

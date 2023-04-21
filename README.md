@@ -1,10 +1,11 @@
 # Terraform Cloud Discord Webhook Proxy
 
-100% made using ChatGPT conversation (included this `README.md`) :heart:
+Made using ChatGPT conversation (included this `README.md`) :heart:
 
 This is a Golang application that listens for Terraform Cloud webhooks and sends formatted messages to a Discord webhook based on the webhook payload.
 
-![Screenshot of Discord channel notification](/docs/example.png =250x250 )
+<img src="docs/example.png" width="40%" height="40%">
+
 ## Prerequisites
 
 - [Terraform Cloud](https://app.terraform.io/) account

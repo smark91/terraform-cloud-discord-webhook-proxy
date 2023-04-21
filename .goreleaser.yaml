@@ -8,6 +8,7 @@ dockers:
     - "smark91/{{ .ProjectName }}:latest-amd64"
   - use: buildx
     goarch: arm64
+    goarm: '8'
     image_templates:
     - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64v8"
     - "smark91/{{ .ProjectName }}:{{ .Major }}-arm64v8"

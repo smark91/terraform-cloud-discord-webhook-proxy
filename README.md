@@ -4,7 +4,7 @@ Made using ChatGPT conversation (included this `README.md`) :heart:
 
 This is a Golang application that listens for Terraform Cloud webhooks and sends formatted messages to a Discord webhook based on the webhook payload.
 
-<img src="docs/example.png" width="40%" height="40%">
+<img src="docs/example.png" width="60%" >
 
 ## Prerequisites
 

@@ -2,6 +2,9 @@ package main
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha512"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"log"
@@ -19,6 +22,9 @@ func main() {
 		log.Fatal("TF_DISCORD_PROXY_WEBHOOK_URL environment variable not set")
 	}
 
+	// Get auth token for HMAC verification (optional)
+	authToken := os.Getenv("TF_DISCORD_PROXY_AUTH_TOKEN")
+
 	// Define the HTTP handler function to handle incoming webhooks
 	http.HandleFunc("/webhook", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
@@ -26,9 +32,27 @@ func main() {
 			return
 		}
 
+		// Write request body to buffer
+		body := &bytes.Buffer{}
+		_, err := body.ReadFrom(r.Body)
+		if err != nil {
+			log.Println("Error reading body:", err)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		defer r.Body.Close()
+
+		// Verify HMAC signature
+		err = verifyHmacSignature(body.Bytes(), r.Header, authToken)
+		if err != nil {
+			log.Println("Error verifying signature for payload:", err)
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
 		// Parse the incoming JSON payload into a struct
 		var payload Payload
-		err := json.NewDecoder(r.Body).Decode(&payload)
+		err = json.Unmarshal(body.Bytes(), &payload)
 		if err != nil {
 			log.Println("Error decoding payload:", err)
 			w.WriteHeader(http.StatusBadRequest)
@@ -91,6 +115,29 @@ type Notification struct {
 	RunUpdatedAt string  `json:"run_updated_at"`
 	RunUpdatedBy *string `json:"run_updated_by"`
 	RunMessage   string  `json:"run_message"`
+}
+
+func verifyHmacSignature(body []byte, headers http.Header, token string) error {
+	// auth token feature disabled
+	if token == "" {
+		return nil
+	}
+
+	signature := headers.Get("X-TFE-Notification-Signature")
+	if signature == "" {
+		return errors.New("request does not have the 'X-TFE-Notification-Signature' header")
+	}
+
+	h := hmac.New(sha512.New, []byte(token))
+	h.Write(body)
+
+	sha := hex.EncodeToString(h.Sum(nil))
+
+	if signature != sha {
+		return errors.New("request signature does not match")
+	}
+
+	return nil
 }
 
 func createDiscordMessage(payload Payload) (string, error) {

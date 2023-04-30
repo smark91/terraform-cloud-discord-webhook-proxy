@@ -78,3 +78,69 @@ func TestSendDiscordWebhook(t *testing.T) {
 		t.Errorf("sendDiscordWebhook returned an error: %v", err)
 	}
 }
+
+func TestVerifyHmacSignature_NoToken(t *testing.T) {
+	token := ""
+	body := []byte("data")
+	headers := http.Header{}
+
+	err := verifyHmacSignature(body, headers, token)
+	if err != nil {
+		t.Errorf("verifyHmacSignature returned an error: %v", err)
+	}
+}
+
+func TestVerifyHmacSignature_ValidSignature(t *testing.T) {
+	token := "my-secret-token"
+	body := []byte("data")
+	signature := "301a279226be9cef7ba4f266495f48afd83fc0be2ea5fc5602abd1c52cc2fe909c4fb328952897136454968a3aebbc03725f4dadd2d9b205bac6474e8eb4667c"
+	headers := http.Header{}
+
+	headers.Set("X-TFE-Notification-Signature", signature)
+
+	err := verifyHmacSignature(body, headers, token)
+	if err != nil {
+		t.Errorf("verifyHmacSignature returned an error: %v", err)
+	}
+}
+
+func TestVerifyHmacSignature_InvalidSignature(t *testing.T) {
+	token := "my-secret-token"
+	body := []byte("data")
+	signature := "de688a78bea0d3ef4d48f75974a9ffb5aec5f3959b05bba2e62b30b9152db1777dc73a71e13e1db7ac9eb63322319cff63e23d8dc33c54f4c689a59743091971"
+	headers := http.Header{}
+
+	headers.Set("X-TFE-Notification-Signature", signature)
+
+	err := verifyHmacSignature(body, headers, token)
+	if err == nil {
+		t.Error("verifyHmacSignature did not return an error, but should have")
+	}
+}
+
+func TestVerifyHmacSignature_NoTokenSkipsSignatureCheck(t *testing.T) {
+	token := ""
+	body := []byte("data")
+	signature := "301a279226be9cef7ba4f266495f48afd83fc0be2ea5fc5602abd1c52cc2fe909c4fb328952897136454968a3aebbc03725f4dadd2d9b205bac6474e8eb4667c"
+	headers := http.Header{}
+
+	headers.Set("X-TFE-Notification-Signature", signature)
+
+	err := verifyHmacSignature(body, headers, token)
+	if err != nil {
+		t.Errorf("verifyHmacSignature returned an error: %v", err)
+	}
+}
+
+func TestVerifyHmacSignature_MissingSignature(t *testing.T) {
+	token := "my-secret-token"
+	body := []byte("data")
+	headers := http.Header{}
+
+	err := verifyHmacSignature(body, headers, token)
+	if err == nil {
+		t.Error("verifyHmacSignature did not return an error, but should have")
+	} else if err.Error() != "request does not have the 'X-TFE-Notification-Signature' header" {
+		t.Errorf("verifyHmacSignature returned the wrong error: %v", err)
+	}
+}

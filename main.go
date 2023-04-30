@@ -54,6 +54,11 @@ func main() {
 		w.WriteHeader(http.StatusOK)
 	})
 
+	// Health check
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	})
+
 	// Start the HTTP server
 	port := os.Getenv("TF_DISCORD_PROXY_PORT")
 	if port == "" {

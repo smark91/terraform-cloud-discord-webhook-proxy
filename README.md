@@ -30,7 +30,13 @@ This is a Golang application that listens for Terraform Cloud webhooks and sends
     export TF_DISCORD_PROXY_PORT=<your-port-number>
     ```
 
-4. Build and run the Golang application:
+4. (Optional) Set the `TF_DISCORD_PROXY_AUTH_TOKEN` environment variable to the Terraform Cloud webhook auth token:
+
+    ```bash
+    export TF_DISCORD_PROXY_AUTH_TOKEN=<your-terraform-cloud-webhook-auth-token>
+    ```
+
+5. Build and run the Golang application:
 
     ```bash
     go run main.go
@@ -39,15 +45,16 @@ This is a Golang application that listens for Terraform Cloud webhooks and sends
     or
 
     ```bash
-    docker run -p $TF_DISCORD_PROXY_PORT:8080 -e TF_DISCORD_PROXY_WEBHOOK_URL=$TF_DISCORD_PROXY_WEBHOOK_URL smark91/terraform-cloud-discord-webhook:<image-version>
+    docker run -p $TF_DISCORD_PROXY_PORT:8080 -e TF_DISCORD_PROXY_WEBHOOK_URL=$TF_DISCORD_PROXY_WEBHOOK_URL -e TF_DISCORD_PROXY_AUTH_TOKEN=$TF_DISCORD_PROXY_AUTH_TOKEN smark91/terraform-cloud-discord-webhook:<image-version>
     ```
 
-5. In your Terraform Cloud workspace, create a notification configuration with the following settings:
+6. In your Terraform Cloud workspace, create a notification configuration with the following settings:
 - **Name:** Discord Webhook
 - **Trigger:** All events
 - **URL:** `<your-server-url>/webhook` (replace `<your-server-url>` with the URL of your server where the Docker container is running)
+- **Token:** `<your-terraform-cloud-webhook-auth-token>` (optional, replace `<your-terraform-cloud-webhook-auth-token>` with a secret webhook auth token)
 
-6. Create a new run in your Terraform Cloud workspace to trigger the webhook.
+7. Create a new run in your Terraform Cloud workspace to trigger the webhook.
 
 ## Using Docker Compose
 
@@ -67,9 +74,10 @@ If you prefer to use Docker Compose to run the Terraform Cloud Discord webhook p
        environment:
          - TF_DISCORD_PROXY_WEBHOOK_URL=<your-discord-webhook-url>
          # - TF_DISCORD_PROXY_PORT=8080
+         # - TF_DISCORD_PROXY_AUTH_TOKEN=<your-terraform-cloud-webhook-auth-token>
    ```
 
-   Replace `<your-discord-webhook-url>` with the Discord webhook URL.
+   Replace `<your-discord-webhook-url>` with the Discord webhook URL, and `<your-terraform-cloud-webhook-auth-token>` with the Terraform Cloud webhook auth token (if you specified one).
 
 3. Run the following command to start the Docker Compose stack:
 

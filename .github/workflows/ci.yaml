@@ -45,6 +45,7 @@ jobs:
       - uses: go-semantic-release/action@v1
         with:
           allow-initial-development-versions: true
+          update-file: Chart.yaml
           changelog-file: CHANGELOG.md
           hooks: goreleaser
         env:

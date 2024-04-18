@@ -3,12 +3,16 @@ dockers:
     goarch: amd64
     image_templates:
     - "smark91/{{ .ProjectName }}:{{ .Version }}-amd64"
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--build-arg=CGO_ENABLED=0"
   - use: buildx
     goarch: arm64
     image_templates:
     - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64"
     build_flag_templates:
       - "--platform=linux/arm64"
+      - "--build-arg=CGO_ENABLED=0"
 
 docker_manifests:
 - name_template: "smark91/{{ .ProjectName }}:{{ .Version }}"

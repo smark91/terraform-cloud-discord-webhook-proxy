@@ -3,7 +3,7 @@ FROM alpine:latest as certs
 # Install the CA certificates needed to make HTTPS requests
 RUN apk --no-cache add ca-certificates
 
-FROM alpine:latest
+FROM scratch
 
 # Copy ca-certificates from alpine image
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt

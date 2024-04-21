@@ -1,3 +1,19 @@
+builds:
+  - id: terraform-cloud-discord-webhook-proxy
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    goarm:
+      - "6"
+    goamd64:
+      - v1
+    targets:
+      - linux_amd64_v1
+      - linux_arm64
+    env:
+      - CGO_ENABLED=0
 dockers:
   - use: buildx
     goarch: amd64
@@ -5,14 +21,12 @@ dockers:
     - "smark91/{{ .ProjectName }}:{{ .Version }}-amd64"
     build_flag_templates:
       - "--platform=linux/amd64"
-      - "--build-arg=CGO_ENABLED=0"
   - use: buildx
     goarch: arm64
     image_templates:
     - "smark91/{{ .ProjectName }}:{{ .Version }}-arm64"
     build_flag_templates:
       - "--platform=linux/arm64"
-      - "--build-arg=CGO_ENABLED=0"
 
 docker_manifests:
 - name_template: "smark91/{{ .ProjectName }}:{{ .Version }}"

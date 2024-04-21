@@ -9,7 +9,7 @@ FROM alpine:latest
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 # Copy the built binary from goreleaser dist folder
-COPY terraform-cloud-discord-webhook-proxy /app
+COPY terraform-cloud-discord-webhook-proxy /app/terraform-cloud-discord-webhook-proxy
 
 # Start the application
-ENTRYPOINT ["/app"]
+ENTRYPOINT ["/app/terraform-cloud-discord-webhook-proxy"]
